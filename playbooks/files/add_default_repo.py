@@ -39,11 +39,6 @@ def repo_exists(repos, name):
     return False
 
 
-def run_or_die(cmd):
-    if os.system(cmd) != 0:
-        sys.exit(cmd + "has been failed with")
-
-
 def main():
     for id in [2, 3]:
         r = Release(id)

@@ -22,6 +22,9 @@
 - name: Add MOS 9.2 default repo
   script: files/add_default_repo.py
 
+- name: Disable Ubuntu UCA release
+  script: files/disable_uca.py
+
 - name: Rebuild bootstrap images
   command: fuel-bootstrap build --activate
   when:

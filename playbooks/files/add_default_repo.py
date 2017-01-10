@@ -1,11 +1,7 @@
 #!/usr/bin/python
 
-import io
-import yaml
-import os
 import sys
-
-TMPFILE="/tmp/defaul_repos.yaml"
+from fuelclient.objects.release import Release
 
 MOS92_UPDATES_REPOS = [
     {
@@ -34,32 +30,32 @@ MOS92_UPDATES_REPOS = [
     },
 ]
 
-def repo_exists(repos,name):
+
+def repo_exists(repos, name):
     for repo in repos:
         if 'name' in repo:
-            if repo['name']==name:
+            if repo['name'] == name:
                 return True
     return False
 
+
 def run_or_die(cmd):
-    if os.system(cmd)!=0:
+    if os.system(cmd) != 0:
         sys.exit(cmd + "has been failed with")
 
-def main():
-    for release in [2,3]:
-        run_or_die("fuel2 release repos list {} -f yaml > {}".format(release, TMPFILE))
 
-        with io.open(TMPFILE, "r") as ifile:
-            data=yaml.load(ifile)
-        
+def main():
+    for id in [2, 3]:
+        r = Release(id)
+        meta = r.get_attributes_metadata()
+        data = meta['editable']['repo_setup']['repos']['value']
+
         for repo in MOS92_UPDATES_REPOS:
             if not repo_exists(data, repo["name"]):
                 data.append(repo)
 
-        with io.open(TMPFILE, "w") as ofile:
-            yaml.dump(data,ofile, default_flow_style=False)
+        r.update_attributes_metadata(meta)
 
-        run_or_die("fuel2 release repos update -f {} {}".format(TMPFILE, release))
 
 if __name__ == '__main__':
     main()

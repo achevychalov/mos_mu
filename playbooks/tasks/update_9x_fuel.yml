@@ -19,6 +19,9 @@
   service: name={{ item }} state=restarted
   with_items: "{{ fuel_services }}"
 
+- name: Add MOS 9.2 default repo
+  script: files/add_default_repo.py
+
 - name: Rebuild bootstrap images
   command: fuel-bootstrap build --activate
   when:

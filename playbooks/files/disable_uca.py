@@ -23,8 +23,8 @@ def main():
     data = release.get_self()
 
     if not data['name'] == NAME:
-        sys.exit("Release with id 3 has unexpected name. "
-                 "Expected name " + NAME)
+        sys.exit("Release with id {} has unexpected name. "
+                 "Expected name {}".format(ID, NAME))
 
     data['state'] = 'unavailable'
 
